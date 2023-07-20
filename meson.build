@@ -20,7 +20,7 @@
 
 project('dbus',
     'c',
-    version: '1.15.4',
+    version: '1.15.6',
     meson_version: '>=0.56',
 )
 
@@ -63,14 +63,14 @@ config.set_quoted('DBUS_DAEMON_NAME', 'dbus-daemon')
 # http://sources.redhat.com/autobook/autobook/autobook_91.html#SEC91
 
 ## increment if the interface has additions, changes, removals.
-lt_current = 39
+lt_current = 40
 ## increment any time the source changes;
 ## set to 0 if you increment CURRENT
 lt_revision = 0
 ## increment if any interfaces have been added;
 ## set to 0 if any interfaces have been changed or removed.
 ## removal has precedence over adding, so set to 0 if both happened.
-lt_age = 36
+lt_age = 37
 
 soversion = (lt_current - lt_age)
 version_info = '@0@.@1@.@2@'.format(soversion, lt_age, lt_revision)
@@ -670,6 +670,7 @@ check_headers = [
     'io.h',
     'locale.h',
     'linux/close_range.h',
+    'linux/magic.h',
     'locale.h',
     'signal.h',
     'syslog.h',
@@ -678,6 +679,7 @@ check_headers = [
     'sys/resource.h',
     'sys/syscall.h',
     'sys/time.h',
+    'sys/vfs.h',
     'unistd.h',
     'ws2tcpip.h',
 ]
@@ -753,6 +755,13 @@ config.set('HAVE_UNPCBID',
     )
 )
 
+config.set('HAVE_FSTATFS',
+    cc.has_function(
+        'fstatfs',
+        prefix : '#include <sys/vfs.h>',
+        args: compile_args_c,
+    )
+)
 
 ###############################################################################
 # Project options
